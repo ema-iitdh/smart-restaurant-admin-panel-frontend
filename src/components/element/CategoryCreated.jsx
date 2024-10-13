@@ -11,7 +11,7 @@ import {
 	Spinner,
 } from 'flowbite-react'
 import { PlusIcon } from 'lucide-react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/lib/axiosApi'
 import useAuth from '../hooks/useAuth'
 
@@ -20,6 +20,7 @@ function CategoryCreated() {
 	const [categoryName, setCategoryName] = useState('')
 
 	const { token } = useAuth()
+	const queryclient = useQueryClient()
 
 	const { mutate: handleCategoryCreated, isPending } = useMutation({
 		mutationKey: ['category_name'],
@@ -39,7 +40,7 @@ function CategoryCreated() {
 		onSuccess: (data) => {
 			console.log(data)
 			setCategoryName('')
-			window.location.reload()
+			queryclient.invalidateQueries('category_name')
 		},
 	})
 
