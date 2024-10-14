@@ -28,7 +28,6 @@ const UploadItem = () => {
 			})
 		},
 	})
-	console.log(list)
 	const handleCategory = (e) => {
 		setCategory(e.target.value)
 	}
@@ -55,6 +54,7 @@ const UploadItem = () => {
 				'Content-Type': 'multipart/form-data',
 				Authorization: `Bearer ${token}`,
 			},
+			withCredentials: 'include',
 		})
 	}
 
@@ -78,8 +78,8 @@ const UploadItem = () => {
 			}
 		},
 		onError: (error) => {
-			console.error('upload failed')
-			toast.error(error.message)
+			console.log(error)
+			toast.error('upload failed')
 		},
 	})
 

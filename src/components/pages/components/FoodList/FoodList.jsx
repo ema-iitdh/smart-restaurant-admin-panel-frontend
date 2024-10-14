@@ -78,7 +78,7 @@ const FoodList = () => {
 				Food Items
 			</h2>
 			{foodList.Data.length === 0 ? (
-				<div className=' font-medium text-xl text-center text-slate-100 mt-[30%] md:mt-[20%] drop-shadow-lg'>
+				<div className=' font-medium text-xl text-center flex text-slate-700 mt-[30%] md:mt-[20%] drop-shadow-lg'>
 					No Food are uploaded
 				</div>
 			) : (
