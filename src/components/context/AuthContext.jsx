@@ -80,8 +80,6 @@ export const AuthProvider = ({ children }) => {
 	})
 
 	//logout and auto-logout when token expires
-	const logoutToken = localStorage.getItem('token')
-	console.log(logoutToken)
 	const {
 		mutate: handleLogout,
 		isPending: logoutPending,
@@ -89,12 +87,16 @@ export const AuthProvider = ({ children }) => {
 	} = useMutation({
 		mutationKey: ['Logout'],
 		mutationFn: async () => {
-			return await Axios.post('/api/admin/logout', {
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${logoutToken}`,
-				},
-			})
+			return await Axios.post(
+				'/api/admin/logout',
+				{},
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
 		},
 		onSuccess: (data) => {
 			if (data?.data.success === true) {

@@ -62,7 +62,7 @@ const UploadItem = () => {
 		mutationFn: onSubmitData,
 		onSuccess: (data) => {
 			console.log(data)
-			if (data?.data?.data.success === true) {
+			if (data?.data?.success === true) {
 				toast.success(data.data.message)
 				setData({
 					name: '',
@@ -188,7 +188,7 @@ const UploadItem = () => {
 							// value={category}
 							name='category'
 						>
-							{list?.data?.data.list.map((category, idx) => (
+							{list?.data?.list.map((category, idx) => (
 								<option key={idx} value={category.category}>
 									{category.category}
 								</option>
