@@ -15,16 +15,13 @@ export default function Profile() {
 	const email = localStorage.getItem('email')
 	const { handleLogout, logoutPending } = useAuth()
 	return (
-		<div className='bg-customThistle h-[50px] flex items-center  shadow-md '>
+		<div className='bg-customWhite	 h-[60px] flex items-center  shadow-md '>
 			<div className=' flex items-center justify-end px-5 gap-4 py-[7px] w-full   '>
 				<div className='flex flex-col '>
 					{email ? (
-						<span className='text-slate-700 text-muted-foreground text-sm font-semibold'>
+						<span className='text-slate-200 text-muted text-sm font-semibold'>
 							{email}
-							<h2 className=' block text-center text-sm text-slate-500 '>
-								{' '}
-								Admin{' '}
-							</h2>
+							<h2 className=' block text-center text-sm '>Admin</h2>
 						</span>
 					) : (
 						<NavLink to='sign_in'>

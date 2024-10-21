@@ -8,8 +8,8 @@ import { toast } from 'react-toastify'
 
 export default function Update() {
 	const { id } = useParams()
-	const { token } = useAuth()
-	console.log(token)
+	console.log(id)
+	const token = localStorage.getItem('token')
 	const queryClient = useQueryClient()
 	const navigate = useNavigate()
 	const [values, setValues] = useState({
@@ -19,6 +19,7 @@ export default function Update() {
 		category: '',
 		price: '',
 		image: null,
+		publicId: '',
 	})
 
 	const { data: foodData } = useQuery({
@@ -34,25 +35,30 @@ export default function Update() {
 		enabled: !!token,
 	})
 
-	useEffect(() => {
-		if (foodData && id) {
-			const items = foodData.Data.find((item) => item._id === id)
-			console.log(items)
-			if (items) {
-				setValues({
-					_id: items._id,
-					name: items.name,
-					category: items.category,
-					price: items.price,
-					description: items.description,
-					image: null,
-				})
+	useEffect(
+		() => {
+			if (foodData && id) {
+				const items = foodData.Data.find((item) => item._id === id)
+				console.log(items)
+				if (items) {
+					setValues({
+						_id: items._id,
+						publicId: items.publicId,
+						name: items.name,
+						category: items.category,
+						price: items.price,
+						description: items.description,
+						image: items.image || null,
+					})
+				}
 			}
-		}
-	}, [foodData, id])
+		},
+		[foodData],
+		id
+	)
 	const onChangeHandler = (e) => {
-		const { name, value } = e.target
-		if (name === 'image') {
+		const { name, value, files } = e.target
+		if (name === 'image' && files.length > 0) {
 			setValues({ ...values, image: files[0] })
 		} else {
 			setValues({ ...values, [name]: value })
@@ -66,7 +72,8 @@ export default function Update() {
 			formData.append('category', values.category)
 			formData.append('price', values.price)
 			formData.append('description', values.description)
-			if (values.image) {
+			formData.append('publicId', values.publicId)
+			if (values.image && values.image instanceof File) {
 				formData.append('image', values.image)
 			}
 			const response = await Axios.put(`/api/food/edit/${id}`, formData, {
@@ -96,29 +103,35 @@ export default function Update() {
 
 	return (
 		<div className='  w-full relative'>
-			<h2 className='text-center mb-3 text-xl font-medium drop-shadow-md text-slate-100'>
+			<h2 className='text-center mb-3 text-xl font-medium drop-shadow-md text-muted-foreground'>
 				Edit Food Items
 			</h2>
-			<form onSubmit={handleSubmit} className='flex justify-center'>
-				<div className='grid   gap-[10px]  border-[1px] border-slate-200 bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-15  p-[16px]  w-[100%] max-w-md shadow-lg '>
+			<form onSubmit={handleSubmit} className='flex justify-center '>
+				<div className='grid   gap-[10px]  border-[1px] border-slate-200 bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-15  p-[16px]  w-[100%] max-w-md shadow-lg text- '>
 					<div>
-						<label className='block text-sm font-medium text-gray-100 mb-2'>
+						<label className='block text-sm font-medium text-muted-foreground mb-2'>
 							Product Image
 						</label>
 						<div className='mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer hover:border-orange-400 transition-colors'>
 							<div className='flex text-sm text-gray-600'>
-								<div className='flex flex-col justify-center items-center'>
+								<div className='flex flex-col justify-center items-center gap-2 '>
 									<img
-										className='object-cover'
-										src={values.image ? `${url}/${values.image}` : uploadImage}
-										width={60}
-										height={60}
+										className='object-cover rounded-md'
+										src={
+											typeof values.image === 'string'
+												? values.image // URL for an existing image
+												: values.image
+												? URL.createObjectURL(values.image) // Preview for a newly selected file
+												: uploadImage
+										} // Default placeholder image
+										width={50}
+										height={40}
 									/>
 									<label
 										htmlFor='image'
 										className='relative cursor-pointer bg-white rounded-md font-medium text-orange-600 hover:text-orange-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-orange-500'
 									>
-										<span className='px-[10px] py-[5px] rounded-full   '>
+										<span className='px-[10px] py-[5px] mt-2 rounded-full   '>
 											Upload a file
 										</span>
 										<input
@@ -126,9 +139,13 @@ export default function Update() {
 											name='image'
 											type='file'
 											className='sr-only'
-											value={values.image}
 											onChange={onChangeHandler}
-											required
+											accept='image/*'
+											required={
+												!values.image || typeof values.image === 'string'
+													? false
+													: true
+											}
 										/>
 									</label>
 								</div>
@@ -138,7 +155,7 @@ export default function Update() {
 					<div className='flex flex-col gap-[12px] '>
 						<label
 							htmlFor='name'
-							className='min-w-[100px] text-md text-slate-100 '
+							className='min-w-[100px] text-md text-muted-foreground '
 						>
 							Food Name
 						</label>
@@ -153,7 +170,10 @@ export default function Update() {
 						/>
 					</div>
 					<div className='flex flex-col gap-[12px] '>
-						<label htmlFor='description ' className='text-md text-slate-100'>
+						<label
+							htmlFor='description '
+							className='text-md text-muted-foreground'
+						>
 							Description
 						</label>
 						<textarea
@@ -168,7 +188,7 @@ export default function Update() {
 					<div className='flex flex-col gap-[12px]'>
 						<label
 							htmlFor='name'
-							className='min-w-[100px] text-md text-slate-100 '
+							className='min-w-[100px] text-md   text-muted-foreground '
 						>
 							Price
 						</label>
@@ -182,7 +202,7 @@ export default function Update() {
 						/>
 					</div>
 					<div className='flex flex-col gap-[12px]  rounded-md'>
-						<span className='text-md font-semibold text-slate-100'>
+						<span className='text-md font-semibold  text-muted-foreground'>
 							Category
 						</span>
 						<input

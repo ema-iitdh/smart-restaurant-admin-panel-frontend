@@ -2,18 +2,19 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import {
 	Home,
 	ImageUpIcon,
+	LayoutDashboard,
 	ListChecks,
 	ListOrderedIcon,
 	MenuIcon,
 	Power,
 } from 'lucide-react'
-import { useMutation } from '@tanstack/react-query'
 
 import { GrRestaurant } from 'react-icons/gr'
 import { ClipLoader, FadeLoader } from 'react-spinners'
 import useAuth from '../hooks/useAuth'
 
 import { useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 const SideBar = () => {
 	const textClass =
 		'flex justify-center gap-3 items-center rounded-md shadow-lg text-neutral-100 text-md  font-semibold py-[10px] hover:bg-blue-400'
@@ -24,15 +25,15 @@ const SideBar = () => {
 		setIsOpen(!isOpen)
 	}
 	return (
-		<div className=' '>
+		<div className=' text-customDarkblue '>
 			{/* Sidebar */}
 			<div
-				className={`bg-gray-800 flex flex-col gap-8 h-screen  text-white p-4 pt-8 ${
+				className={`bg-customWhite flex flex-col gap-8 h-screen  text-slate-600 p-4 pt-8 ${
 					isOpen ? 'w-64' : 'w-[85px]'
 				} duration-200 relative`}
 			>
 				<MenuIcon
-					className={`text-3xl absolute top-2  left-6	 cursor-pointer transform ${
+					className={`text-3xl  cursor-pointer transform ${
 						isOpen ? 'rotate-180' : ''
 					}`}
 					onClick={handleToggle}
@@ -40,10 +41,10 @@ const SideBar = () => {
 				<div className='border-b-[1px] pb-1 w-full border-slate-500 '>
 					<div className='flex  justify-center items-center gap-4 pt-10   '>
 						<GrRestaurant
-							className={`text-green-400 text-2xl cursor-pointer `}
+							className={`text-green-400 drop-shadow-md text-2xl cursor-pointer `}
 						/>
 						<h1
-							className={`text-green-400 origin-left font-medium text-xl duration-200 ${
+							className={`text-green-400 drop-shadow-md origin-left font-medium text-xl duration-200 ${
 								!isOpen && 'scale-0'
 							}`}
 						>
@@ -51,43 +52,47 @@ const SideBar = () => {
 						</h1>
 					</div>
 				</div>
-				<ul className='pt-6 flex-1'>
-					<NavLink to='/' className='flex items-center gap-x-4 p-2'>
-						<Home className={`text-white text-xl hover:scale-[1.2]`} />
+				<ul className='pt-6 flex-1 text-muted-foreground '>
+					<NavLink
+						to='/'
+						className='flex items-center gap-x-4 p-2 drop-shadow-md font-semibold hover:bg-customPurple hover:text-customWhite hover:rounded-md hover:scale-105 transition-transform duration-300'
+					>
+						<LayoutDashboard />
 						<span
-							className={`text-white origin-left duration-200 ${
-								!isOpen && 'hidden'
-							}`}
+							className={` origin-left duration-200 ${!isOpen && 'hidden'}`}
 						>
 							Dashboard
 						</span>
 					</NavLink>
-					<NavLink to='/add' className='flex items-center gap-x-4 p-2 mt-4'>
-						<ImageUpIcon className='text-white text-xl hover:scale-[1.2]' />
+					<NavLink
+						to='/add'
+						className='flex items-center gap-x-4 p-2 mt-4 drop-shadow-md font-semibold  hover:bg-customPurple hover:text-customWhite hover:rounded-md hover:scale-105 transition-transform duration-300 '
+					>
+						<ImageUpIcon className=' text-xl hover:scale-[1.2]' />
 						<span
-							className={`text-white origin-left duration-200 ${
-								!isOpen && 'hidden'
-							}`}
+							className={` origin-left duration-200 ${!isOpen && 'hidden'}`}
 						>
 							Upload Items
 						</span>
 					</NavLink>
-					<NavLink to='/list' className='flex items-center gap-x-4 p-2 mt-4'>
-						<ListChecks className='text-white text-xl hover:scale-[1.2]' />
+					<NavLink
+						to='/list'
+						className='flex items-center gap-x-4 p-2 mt-4 drop-shadow-md font-semibold  hover:bg-customPurple hover:text-customWhite hover:rounded-md hover:scale-105 transition-transform duration-300'
+					>
+						<ListChecks className=' text-xl hover:scale-[1.2]' />
 						<span
-							className={`text-white origin-left duration-200 ${
-								!isOpen && 'hidden'
-							}`}
+							className={` origin-left duration-200 ${!isOpen && 'hidden'}`}
 						>
 							Items
 						</span>
 					</NavLink>
-					<NavLink to='/orders' className='flex items-center gap-x-4 p-2 mt-4'>
-						<ListOrderedIcon className='text-white text-xl hover:scale-[1.2]' />
+					<NavLink
+						to='/orders'
+						className='flex items-center gap-x-4 p-2 mt-4 drop-shadow-md font-semibold  hover:bg-customPurple hover:text-customWhite hover:rounded-md hover:scale-105 transition-transform duration-300  '
+					>
+						<ListOrderedIcon className=' text-xl hover:scale-[1.2] ' />
 						<span
-							className={`text-white origin-left duration-200 ${
-								!isOpen && 'hidden'
-							}`}
+							className={` origin-left duration-200 ${!isOpen && 'hidden'}`}
 						>
 							Orders
 						</span>

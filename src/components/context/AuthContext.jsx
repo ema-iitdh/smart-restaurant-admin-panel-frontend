@@ -12,14 +12,12 @@ export const AuthProvider = ({ children }) => {
 		localStorage.getItem('token') ? true : false
 	)
 	const [token, setToken] = useState(null)
-	console.log(token)
 	const navigate = useNavigate()
 	const queryClient = useQueryClient()
 
 	useEffect(() => {
 		const checkStatus = () => {
 			const tokenFromLocalStorage = localStorage.getItem('token')
-			console.log(tokenFromLocalStorage)
 			if (tokenFromLocalStorage) {
 				console.log('setting true')
 				setIsAuthenticated(true)
@@ -38,15 +36,6 @@ export const AuthProvider = ({ children }) => {
 		socket.on('connect', () => {
 			console.log('connected')
 		})
-
-		// socket.on('abc', (data) => {
-		// 	console.log(data)
-		// 	queryClient.invalidateQueries({ queryKey: ['order-list'] })
-		// })
-		// socket.on('paymentResponse ', (data) => {
-		// 	console.log(data)
-		// 	queryClient.invalidateQueries({ queryKey: ['order-list'] })
-		// })
 	}, [])
 
 	const handleSubmit = async (values) => {
@@ -67,7 +56,6 @@ export const AuthProvider = ({ children }) => {
 		mutationKey: ['Login'],
 		mutationFn: handleSubmit,
 		onSuccess: (data) => {
-			console.log(data)
 			const token = data?.data?.token
 			const email = data?.data?.email
 			if (token && email) {
@@ -78,19 +66,22 @@ export const AuthProvider = ({ children }) => {
 				toast.success('Login successfully')
 				navigate('/', { replace: true })
 			} else if (token === null) {
-				localStorage.removeItem('token')
+				localStorage.removeItem('token ')
+				setIsAuthenticated(false)
+				setToken(null)
 				toast.error('Token not Found')
 				navigate('/sign_in')
 			}
 		},
 		onError: (error) => {
-			console.log(error)
 			const errorMessage = error.response?.data?.message || 'Login Failed'
 			toast.error(errorMessage)
 		},
 	})
-	//logout
 
+	//logout and auto-logout when token expires
+	const logoutToken = localStorage.getItem('token')
+	console.log(logoutToken)
 	const {
 		mutate: handleLogout,
 		isPending: logoutPending,
@@ -98,22 +89,17 @@ export const AuthProvider = ({ children }) => {
 	} = useMutation({
 		mutationKey: ['Logout'],
 		mutationFn: async () => {
-			return await Axios.post(
-				'/api/admin/logout',
-				{},
-				{
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			)
+			return await Axios.post('/api/admin/logout', {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${logoutToken}`,
+				},
+			})
 		},
 		onSuccess: (data) => {
-			if (data.data.success === true) {
+			if (data?.data.success === true) {
 				toast.success('Logout Successfull')
-				localStorage.removeItem('token')
-				localStorage.removeItem('email')
+				localStorage.clear()
 				setIsAuthenticated(false)
 				setToken(null)
 
@@ -121,7 +107,6 @@ export const AuthProvider = ({ children }) => {
 			}
 		},
 		onError: (data) => {
-			console.log(data)
 			const responseData = data?.response?.data
 			if (responseData?.success !== true && data?.response?.status === 400) {
 				toast.error(responseData?.message)
@@ -131,6 +116,40 @@ export const AuthProvider = ({ children }) => {
 			}
 		},
 	})
+	// useEffect(() => {
+	// 	if (savetoken) {
+	// 		// Ensure token has three parts (header, payload, signature) and is valid
+	// 		const tokenParts = savetoken.split('.')
+	// 		if (tokenParts.length === 3) {
+	// 			try {
+	// 				const tokenPayload = JSON.parse(atob(tokenParts[1])) // Decode the payload (second part of JWT)
+	// 				const expirationTime = tokenPayload.exp * 1000 // Token expiration time in milliseconds
+	// 				const currentTime = Date.now()
+
+	// 				if (currentTime > expirationTime) {
+	// 					// If the token is expired, immediately log out
+	// 					handleLogout()
+	// 				} else {
+	// 					// Set a timeout to log out when the token expires
+	// 					const timeout = setTimeout(() => {
+	// 						handleLogout()
+	// 					}, expirationTime - currentTime) // Time remaining until expiration
+
+	// 					return () => clearTimeout(timeout) // Clear the timeout on component unmount
+	// 				}
+	// 			} catch (error) {
+	// 				console.error('Error decoding token:', error)
+	// 				handleLogout() // If decoding fails, log out the user
+	// 			}
+	// 		} else {
+	// 			console.error('Invalid token format.')
+	// 			handleLogout() // If token doesn't have three parts, it's invalid
+	// 		}
+	// 	} else {
+	// 		// If there's no token, log out the user
+	// 		handleLogout()
+	// 	}
+	// }, [savetoken, handleLogout])
 
 	return (
 		<AuthContext.Provider

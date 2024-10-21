@@ -25,7 +25,7 @@ const formSchema = z.object({
 	}),
 })
 export default function Login() {
-	const { handleLogin, loginPending, loginIsError } = useAuth()
+	const { handleLogin, loginPending } = useAuth()
 
 	const form = useForm({
 		resolver: zodResolver(formSchema),

@@ -16,7 +16,12 @@ export const columns = [
 		id: 'Table Number',
 		accessorKey: 'customerId.currentTableNumber',
 		header: 'Table Number',
-		cell: (info) => <div className='text-lg'> {info.getValue()} </div>,
+		cell: (info) =>
+			info.row.original.customerId === null ? (
+				<span className='text-customGreen'> Completed </span>
+			) : (
+				<div>{info.getValue()}</div>
+			),
 	},
 	{
 		id: 'Status',

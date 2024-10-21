@@ -65,7 +65,11 @@ function CategoryCreated() {
 					</div>
 
 					<div className='flex gap-2'>
-						<Button color='success' onClick={() => handleCategoryCreated()}>
+						<Button
+							color='success'
+							type='submit'
+							onClick={() => handleCategoryCreated()}
+						>
 							{isPending ? <Spinner color='success' size='sm' /> : 'Save'}
 						</Button>
 					</div>

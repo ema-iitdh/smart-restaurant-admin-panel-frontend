@@ -1,5 +1,8 @@
+import { Button } from '@/components/ui/button'
 import { url } from '@/lib/axiosApi'
-import { Button, Spinner, Table } from 'flowbite-react'
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Spinner, Table } from 'flowbite-react'
 import { DeleteIcon, Pencil, Trash2 } from 'lucide-react'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -9,16 +12,13 @@ export default function ReadOnlyFoodList({
 	isPending,
 	handleDelete,
 }) {
-	const driveImage = `https://drive.google.com/thumbnail?id=${adminFoodList.image}&sz=wP1000-h1000
-`
-	console.log(driveImage)
 	return (
 		<Table.Body className='divide-y p-1 '>
 			<Table.Row className='text-sm'>
 				<Table.Cell>
 					<img
-						className='w-20 h-20  rounded-md shadow-md'
-						src={driveImage}
+						className='rounded-md shadow-md'
+						src={adminFoodList.image}
 						width={30}
 						height={30}
 						// src={adminFoodList.image}
@@ -35,10 +35,10 @@ export default function ReadOnlyFoodList({
 				</Table.Cell>
 				<Table.Cell>
 					<Link to={`/update/${adminFoodList._id}`}>
-						<Button color='blue' className='drop-shadow-md'>
-							<div className='flex gap-3 '>
-								<Pencil color=' white ' size={20} />
+						<Button className='drop-shadow-md p-[12px] bg-customGreen hover:bg-green-500'>
+							<div className='flex items-center gap-2 '>
 								Edit
+								<FontAwesomeIcon icon={faPenToSquare} />
 							</div>
 						</Button>
 					</Link>
@@ -47,8 +47,7 @@ export default function ReadOnlyFoodList({
 					<Button
 						onClick={() => handleDelete(adminFoodList._id)}
 						disabled={isPending === adminFoodList._id}
-						color='failure'
-						className='drop-shadow-md'
+						className='drop-shadow-md bg-customRed hover:bg-red-500'
 					>
 						{isPending === adminFoodList._id ? (
 							<Spinner color='warning' size='sm' />

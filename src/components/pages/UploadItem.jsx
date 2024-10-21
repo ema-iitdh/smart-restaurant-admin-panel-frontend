@@ -10,8 +10,8 @@ import CategoryCreated from '../element/CategoryCreated'
 const UploadItem = () => {
 	const [image, setImage] = useState()
 	const [category, setCategory] = useState({})
-	console.log(category)
 	const { token } = useAuth()
+	console.log(token)
 	const [data, setData] = useState({
 		name: '',
 		description: '',
@@ -49,12 +49,11 @@ const UploadItem = () => {
 		formData.append('price', data.price)
 		formData.append('image', image)
 
-		return await Axios.post(`/api/food/uploadFood	`, formData, {
+		return await Axios.post(`/api/food/upload`, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 				Authorization: `Bearer ${token}`,
 			},
-			withCredentials: 'include',
 		})
 	}
 
@@ -63,7 +62,7 @@ const UploadItem = () => {
 		mutationFn: onSubmitData,
 		onSuccess: (data) => {
 			console.log(data)
-			if (data.data.success === true) {
+			if (data?.data?.data.success === true) {
 				toast.success(data.data.message)
 				setData({
 					name: '',
@@ -89,9 +88,9 @@ const UploadItem = () => {
 				<div className='absolute z-10 top-0 right-2'>
 					<CategoryCreated />
 				</div>
-				<div className='grid   gap-[10px]  border-[1px] border-slate-200 bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-15  p-[16px]  w-[100%] max-w-md shadow-lg '>
+				<div className='grid  gap-[10px]   border-[1px] border-slate-200 bg-customWhite rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-15  p-[16px]  w-[100%] max-w-md shadow-lg '>
 					<div>
-						<label className='block text-sm font-medium text-gray-100 mb-2'>
+						<label className='block text-sm font-semibold text-muted-foreground mb-2 '>
 							Product Image
 						</label>
 						<div className='mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer hover:border-orange-400 transition-colors'>
@@ -125,7 +124,7 @@ const UploadItem = () => {
 					<div className='flex flex-col gap-[12px] '>
 						<label
 							htmlFor='name'
-							className='min-w-[100px] text-md text-slate-100 '
+							className='min-w-[100px] text-md text-muted-foreground font-semibold'
 						>
 							Food Name
 						</label>
@@ -147,7 +146,10 @@ const UploadItem = () => {
 						/>
 					</div>
 					<div className='flex flex-col gap-[12px] '>
-						<label htmlFor='description ' className='text-md text-slate-100'>
+						<label
+							htmlFor='description '
+							className='text-md text-muted-foreground font-semibold'
+						>
 							Description
 						</label>
 						<textarea
@@ -162,7 +164,7 @@ const UploadItem = () => {
 					<div className='flex flex-col gap-[12px]'>
 						<label
 							htmlFor='name'
-							className='min-w-[100px] text-md text-slate-100 '
+							className='min-w-[100px] text-md text-muted-foreground font-semibold '
 						>
 							Price
 						</label>
@@ -176,7 +178,7 @@ const UploadItem = () => {
 						/>
 					</div>
 					<div className='flex flex-col gap-[12px]  rounded-md'>
-						<span className='text-xl font-semibold text-slate-100'>
+						<span className='text-md font-semibold text-muted-foreground'>
 							Category
 						</span>
 
@@ -186,7 +188,7 @@ const UploadItem = () => {
 							// value={category}
 							name='category'
 						>
-							{list?.data.list.map((category, idx) => (
+							{list?.data?.data.list.map((category, idx) => (
 								<option key={idx} value={category.category}>
 									{category.category}
 								</option>
