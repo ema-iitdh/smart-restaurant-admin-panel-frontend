@@ -12,17 +12,15 @@ import { useFoodList } from '@/components/hooks/useFoodlist'
 import { useCategorylist } from '@/components/hooks/useCategorylist'
 export default function WelcomePage() {
 	const { token } = useAuth()
-	console.log(token)
 	const { data: foodlist } = useFoodList(token)
 	const { data: categorylist } = useCategorylist()
-	console.log(categorylist)
 
-	const allProducts = foodlist?.Data.length
-	const allCategory = categorylist?.list.length
+	const allproducts = foodlist?.Data?.length || 0
+	const allCategory = categorylist?.list?.length || 0
 
 	return (
 		<>
-			<h2 className=' text-xl sm:text-3xl text-customPurple font-semibold drop-shadow-lg pb-10 pl-3'>
+			<h2 className=' text-xl sm:text-3xl  text-customPurple font-semibold drop-shadow-lg pb-10 pl-3'>
 				Welcome to Dashboard
 			</h2>
 			<div className='p-3  font-manrope grid grid-cols-1 	 md:grid-cols-2 gap-5 '>
@@ -43,7 +41,7 @@ export default function WelcomePage() {
 								/>
 							</span>
 							<h2 className=' text-xl md:text-xl text-customWhite font-semibold		 '>
-								+ {allProducts}
+								+ {allproducts}
 							</h2>
 						</div>
 					</NavLink>

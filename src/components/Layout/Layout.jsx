@@ -6,7 +6,7 @@ import Profile from '../header/Profile'
 export default function Layout() {
 	return (
 		<div
-			className='flex flex-row h-[100svh] w-screen  overflow-hidden '
+			className='flex flex-row h-[100svh] w-screen  '
 
 			// style={{
 			// 	background: `url(
@@ -17,9 +17,9 @@ export default function Layout() {
 			// }}
 		>
 			<SideBar />
-			<div className='flex-1 flex-col bg-gray-100	 flex -hidden'>
+			<div className='flex-1 flex-col bg-gray-100	 flex '>
 				<Profile />
-				<div className=' flex-1  p-4 overflow-y-auto '>
+				<div className=' flex-1  p-4 overflow-auto  '>
 					<Outlet />
 				</div>
 			</div>

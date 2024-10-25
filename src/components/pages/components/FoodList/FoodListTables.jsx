@@ -18,7 +18,7 @@ export default function FoodListTables({ foodList }) {
 		) || []
 
 	return (
-		<div className='container mx-auto px-4 font-manrope'>
+		<div className='container mx-auto px-2 	 font-manrope'>
 			<h2 className='text-center py-2 font-medium text-lg drop-shadow-lg text-slate-700'>
 				Food Items
 			</h2>
@@ -44,7 +44,7 @@ export default function FoodListTables({ foodList }) {
 								className='border-b font-medium text-muted-foreground'
 							>
 								{/* Food Image and Item Name */}
-								<td className='py-4 px-6'>
+								<td className='py-4 px-6 min-w-[10px]'>
 									<div className='flex items-center'>
 										<img
 											src={item.image}

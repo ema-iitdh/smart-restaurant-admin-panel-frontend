@@ -51,7 +51,7 @@ function CategoryCreated() {
 			open={open}
 			onOpenChange={setOpen}
 			content={
-				<div className='flex w-64 flex-col gap-4 p-4 text-sm text-gray-500 dark:text-gray-400'>
+				<div className='flex w-32 md:w-64 flex-col gap-4 p-4 text-sm text-gray-500 dark:text-gray-400'>
 					<div>
 						<div className='mb-2 block'>
 							<Label htmlFor='Category' value='Category' />
@@ -76,7 +76,7 @@ function CategoryCreated() {
 				</div>
 			}
 		>
-			<Button>
+			<Button className=''>
 				<PlusIcon />
 				Add New Category
 			</Button>
