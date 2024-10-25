@@ -67,7 +67,7 @@ export default function FoodListTables({ foodList }) {
 								<td className='py-4 px-6 text-sm'>{item.category}</td>
 
 								{/* Actions */}
-								<td className='py-4 px-6'>
+								<td className='py-4 px-6 min-w-[200px]'>
 									<div className='flex space-x-2'>
 										<NavLink to={`/update/${item._id}`}>
 											<button className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center'>
