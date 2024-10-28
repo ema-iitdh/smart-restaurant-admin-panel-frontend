@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import UploadItem from './components/pages/UploadItem'
 import FoodList from './components/pages/components/FoodList/FoodList'
 import Orders from './components/order/Orders'
@@ -35,7 +35,6 @@ function App() {
 					<Route path='*' element={<PageNotFound />} />
 					<Route element={<CheckIfAlreadyAuthenticated />}>
 						<Route path='/sign_up' element={<SignUp />} />
-						{/* Corrected path */}
 						<Route path='/sign_in' element={<Login />} />
 					</Route>
 				</Routes>
