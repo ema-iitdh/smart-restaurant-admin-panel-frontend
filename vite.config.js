@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { fileURLToPath } from 'url'
 
 export default defineConfig({
-	base: '/admin/',
+	base: '/admin',
 	plugins: [react()],
 	build: {
 		sourcemap: false, // Disable sourcemaps for production builds
