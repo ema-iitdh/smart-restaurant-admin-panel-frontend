@@ -72,7 +72,11 @@ const FoodList = () => {
 
 	return (
 		<div className='container md:mx-auto  md:px-4 font-manrope '>
-			<FoodListTables foodList={foodList} />
+			<FoodListTables
+				foodList={foodList}
+				handleDelete={handleDelete}
+				loadingId={loadingId}
+			/>
 			{/* Pagination component should receive necessary props */}
 		</div>
 	)

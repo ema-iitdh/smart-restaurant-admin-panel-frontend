@@ -6,5 +6,5 @@ export default function ProtectedRoute() {
 	const { isAuthenticated } = useAuth()
 	console.log('authentication', isAuthenticated)
 
-	return isAuthenticated ? <Outlet /> : <Navigate to='/sign_in' replace />
+	return isAuthenticated ? <Outlet /> : <Navigate to='/auth/sign_up' replace />
 }

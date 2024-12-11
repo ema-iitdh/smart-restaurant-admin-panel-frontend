@@ -25,10 +25,10 @@ const SideBar = () => {
 		setIsOpen(!isOpen)
 	}
 	return (
-		<div className=' text-customDarkblue '>
+		<div className=' text-customWhite  '>
 			{/* Sidebar */}
 			<div
-				className={`bg-customWhite flex flex-col gap-8 h-screen  text-slate-600 p-4 pt-8 ${
+				className={`bg-gray-800 flex flex-col gap-8 h-screen  text-slate-600 p-4 pt-8 ${
 					isOpen ? 'w-64' : 'w-[85px]'
 				} duration-200 relative`}
 			>
@@ -48,7 +48,7 @@ const SideBar = () => {
 								!isOpen && 'scale-0'
 							}`}
 						>
-							Fast Order
+							Fast
 						</h1>
 					</div>
 				</div>

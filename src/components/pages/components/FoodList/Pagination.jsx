@@ -21,7 +21,9 @@ export default function Pagination({
 				{currentPages} of {totalPages}
 			</span>
 			<Button
-				onClick={onNext}
+				onClick={() => {
+					onNext()
+				}}
 				disabled={currentPages === totalPages}
 				className={`px-4 py-2 ${
 					currentPages === totalPages

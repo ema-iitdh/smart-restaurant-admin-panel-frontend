@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(
 		localStorage.getItem('token') ? true : false
 	)
-	const [token, setToken] = useState(null)
+	const [token, setToken] = useState(localStorage.getItem('token') || null)
 	const navigate = useNavigate()
 	const queryClient = useQueryClient()
 
@@ -56,21 +56,36 @@ export const AuthProvider = ({ children }) => {
 		mutationKey: ['Login'],
 		mutationFn: handleSubmit,
 		onSuccess: (data) => {
+			// console.log('data', data)
 			const token = data?.data?.token
-			const email = data?.data?.email
-			if (token && email) {
+			// console.log('token', token)
+			const role = data?.data?.Data?.Role
+			const restaurantId = data?.data.Data?.Restaurant
+			// console.log('role', role, 'restaurantId ', restaurantId)
+			if (token && role) {
+				// console.log('object')
 				localStorage.setItem('token', token)
-				localStorage.setItem('email', email)
 				setIsAuthenticated(true)
 				setToken(token)
+				// console.log('object')
 				toast.success('Login successfully')
-				navigate('/', { replace: true })
-			} else if (token === null) {
+				// console.log('object')
+				if (role === 'Super_Admin') {
+					console.log('navigate')
+					navigate('/super-admin-dashboard', { replace: true })
+				} else if (data && role === 'Restaurant_Admin') {
+					if (restaurantId) {
+						navigate(`/restaurant-admin-dashboard/${restaurantId}`)
+					}
+				}
+				return
+			}
+			if (token === null) {
 				localStorage.removeItem('token ')
 				setIsAuthenticated(false)
 				setToken(null)
 				toast.error('Token not Found')
-				navigate('/sign_in')
+				navigate('/auth/sign_in')
 			}
 		},
 		onError: (error) => {
@@ -101,57 +116,56 @@ export const AuthProvider = ({ children }) => {
 		onSuccess: (data) => {
 			if (data?.data.success === true) {
 				toast.success('Logout Successfull')
-				localStorage.clear()
+				localStorage.removeItem('token')
 				setIsAuthenticated(false)
 				setToken(null)
 
-				navigate('/sign_in', { replace: true })
+				navigate('/auth/sign_in', { replace: true })
 			}
 		},
 		onError: (data) => {
 			const responseData = data?.response?.data
+			console.log('logout error', error)
 			if (responseData?.success !== true && data?.response?.status === 400) {
 				toast.error(responseData?.message)
-				localStorage.clear()
-				setToken(false)
+				localStorage.removeItem('token')
+				setToken(null)
 				setIsAuthenticated(false)
 			}
 		},
 	})
-	// useEffect(() => {
-	// 	if (savetoken) {
-	// 		// Ensure token has three parts (header, payload, signature) and is valid
-	// 		const tokenParts = savetoken.split('.')
-	// 		if (tokenParts.length === 3) {
-	// 			try {
-	// 				const tokenPayload = JSON.parse(atob(tokenParts[1])) // Decode the payload (second part of JWT)
-	// 				const expirationTime = tokenPayload.exp * 1000 // Token expiration time in milliseconds
-	// 				const currentTime = Date.now()
+	useEffect(() => {
+		if (token) {
+			const tokenParts = token.split('.')
+			if (tokenParts.length === 3) {
+				try {
+					const payload = tokenParts[1]
+					const tokenPayload = JSON.parse(
+						decodeURIComponent(escape(atob(payload)))
+					)
 
-	// 				if (currentTime > expirationTime) {
-	// 					// If the token is expired, immediately log out
-	// 					handleLogout()
-	// 				} else {
-	// 					// Set a timeout to log out when the token expires
-	// 					const timeout = setTimeout(() => {
-	// 						handleLogout()
-	// 					}, expirationTime - currentTime) // Time remaining until expiration
-
-	// 					return () => clearTimeout(timeout) // Clear the timeout on component unmount
-	// 				}
-	// 			} catch (error) {
-	// 				console.error('Error decoding token:', error)
-	// 				handleLogout() // If decoding fails, log out the user
-	// 			}
-	// 		} else {
-	// 			console.error('Invalid token format.')
-	// 			handleLogout() // If token doesn't have three parts, it's invalid
-	// 		}
-	// 	} else {
-	// 		// If there's no token, log out the user
-	// 		handleLogout()
-	// 	}
-	// }, [savetoken, handleLogout])
+					const expirationTime = tokenPayload.exp * 1000 // Convert to milliseconds
+					const currentTime = Date.now()
+					if (currentTime > expirationTime) {
+						handleLogout()
+					} else {
+						const timeout = setTimeout(() => {
+							handleLogout()
+						}, expirationTime - currentTime)
+						return () => clearTimeout(timeout)
+					}
+				} catch (error) {
+					console.error('Error decoding token:', error)
+					handleLogout()
+				}
+			} else {
+				console.error('Invalid token format.')
+				handleLogout()
+			}
+		} else {
+			handleLogout()
+		}
+	}, [token, handleLogout])
 
 	return (
 		<AuthContext.Provider

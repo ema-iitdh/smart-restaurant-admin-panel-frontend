@@ -17,9 +17,7 @@ import { Input } from '../ui/input'
 import { ClipLoader } from 'react-spinners'
 
 const formSchema = z.object({
-	email: z.string().email({
-		message: 'Invalid email address',
-	}),
+	name: z.string().min(1, 'Name is required'),
 	password: z.string().min(8, {
 		message: ' Password must be 8 character at least..',
 	}),
@@ -30,7 +28,7 @@ export default function Login() {
 	const form = useForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			email: '',
+			name: '',
 			password: '',
 		},
 	})
@@ -41,32 +39,28 @@ export default function Login() {
 	}
 
 	return (
-		<div
-			className=' min-h-[100svh] flex items-center justify-center'
-			style={{
-				background: `url(
-				https://images.unsplash.com/photo-1554034483-04fda0d3507b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
-				)`,
-			}}
-		>
-			<div className='flex flex-col gap-3 w-full max-w-[350px] rounded-lg bg-slate-200 border-[1px] bg-clip-padding   bg-opacity-10 py-[40px] px-[30px] shadow-lg'>
+		<div className=' min-h-[100svh] flex items-center justify-center bg-gradient-to-br from-customBlue to-customPurple'>
+			<div className='flex flex-col gap-3 w-full max-w-md rounded-lg bg-white/90  py-[40px] px-[30px] shadow-md'>
 				<Form
 					{...form}
 					// method='post'
 					// onSubmit={handleLogin}
 				>
-					<form onSubmit={form.handleSubmit(onsubmit)} className='space-y-6'>
-						<h2 className='text-center text-slate-100 font-medium text-lg'>
-							Login
+					<form
+						onSubmit={form.handleSubmit(onsubmit)}
+						className='space-y-6 text-customBlack	'
+					>
+						<h2 className='text-center  font-medium text-lg'>
+							Login to Restaurant Portal
 						</h2>
 						<FormField
 							control={form.control}
-							name='email'
+							name='name'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className='text-slate-100'> Email </FormLabel>
+									<FormLabel className='text'> Name </FormLabel>
 									<FormControl>
-										<Input placeholder='Email' {...field} />
+										<Input placeholder='Choose a unique username' {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -77,7 +71,7 @@ export default function Login() {
 							name='password'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel className='text-slate-100'> Password </FormLabel>
+									<FormLabel> Password </FormLabel>
 									<FormControl>
 										<Input type='password' placeholder='Password' {...field} />
 									</FormControl>
@@ -89,8 +83,7 @@ export default function Login() {
 							<Button
 								type='submit'
 								disabled={loginPending}
-								color='dark'
-								className='w-full'
+								className='w-full bg-emerald-500  hover:bg-emerald-600'
 							>
 								{loginPending ? (
 									<div className='flex items-center gap-2'>
@@ -103,10 +96,10 @@ export default function Login() {
 							</Button>
 						</div>
 						<div className='flex gap-2 justify-center items-center	'>
-							<span className='text-slate-100'> Don't have an account?</span>
+							<span className='font-semibold'> Don't have an account?</span>
 							<Link
-								to='/sign_up'
-								className='text-blue-800 font-semibold drop-shadow-md'
+								to='/auth/sign_up'
+								className=' font-semibold drop-shadow-md'
 							>
 								Sign Up
 							</Link>

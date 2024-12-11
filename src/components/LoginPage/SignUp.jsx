@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Axios } from '../../lib/axiosApi'
-import { data } from 'autoprefixer'
 import { useNavigate, useNavigation } from 'react-router'
 import Login from './Login'
 import {
@@ -16,14 +15,22 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
+import { Link } from 'react-router-dom'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '../ui/select'
+import { useQuery } from '@tanstack/react-query'
 
 const formSchema = z.object({
-	email: z.string().email({
-		message: 'Invalid email address',
-	}),
-	password: z.string().min(8, {
-		message: 'Password must be 8 character at least',
-	}),
+	name: z.string().min(1, 'Name is required'),
+	password: z.string().min(6, 'Password must be at least 6 characters'),
+	role: z.enum(['Super_Admin', 'Restaurant_Admin'], 'Select a valid role'),
+	email: z.string().email('Enter a valid email'),
+	restaurant: z.string().min(1, 'Restaurant Name is required'),
 })
 
 export default function SignUp() {
@@ -32,60 +39,84 @@ export default function SignUp() {
 	const form = useForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
+			name: '',
 			email: '',
 			password: '',
+			role: '',
+			restaurant: '',
 		},
 	})
 
 	const navigate = useNavigate()
 
-	//sign up
+	const { data: restauranList } = useQuery({
+		queryKey: ['Restaurant-list'],
+		queryFn: async () => {
+			const response = await Axios.get('/api/restaurant/list')
+			return response.data
+		},
+	})
+
 	const handleSubmit = async (values) => {
-		const { data } = await Axios.post('/api/admin/signup', values, {
+		if (values.role === 'Super_Admin') {
+			// biome-ignore lint/performance/noDelete: <explanation>
+			delete values.restaurant
+		}
+		console.log('values data', values)
+		const data = await Axios.post('/api/admin/signup', values, {
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(values),
 		})
 		if (data.success) {
+			console.log(data)
 			setIsSignupSuccessful(true)
-			navigate('/sign_in')
+			navigate('/auth/sign_in')
 		} else {
-			navigate('/sign_in')
+			navigate('/auth/sign_in')
 		}
+		console.log('object', values)
 	}
 	function onsubmit(values) {
 		console.log(values)
 		handleSubmit(values)
 	}
+	const selectRole = form.watch('role')
 
 	return (
-		<div
-			className='bg-red-300 min flex flex-row  justify-center items-center min-h-screen '
-			style={{
-				background: `url(
-			https://images.unsplash.com/photo-1554034483-04fda0d3507b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
-			)`,
-			}}
-		>
+		<div className='bg-gradient-to-br from-customBlue to-customPurple min flex flex-row  justify-center items-center min-h-screen '>
 			{!isSignupSuccessful ? (
-				<div className='flex flex-col gap-3 w-full max-w-[350px] rounded-lg bg-slate-400 border-[1px] bg-clip-padding  border-slate-100 backdrop-filter backdrop-blur-lg  bg-opacity-10 py-[40px] px-[30px] shadow-lg'>
+				<div className='flex flex-col gap-3 w-full max-w-md rounded-lg bg-white/90 py-[40px] px-[30px] shadow-md'>
 					<Form {...form}>
 						<form
 							onSubmit={form.handleSubmit(onsubmit)}
-							className=' space-y-6  '
+							className=' space-y-4 text-customBlack '
 						>
-							<h2 className='text-center font-medium text-slate-100 text-lg'>
-								Sign up
+							<h2 className='text-center font-medium text-lg'>
+								Sign Up for Restaurant Management
 							</h2>
+							<FormField
+								control={form.control}
+								name='name'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel> Name * </FormLabel>
+										<FormControl>
+											<Input placeholder='Enter your name' {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 							<FormField
 								control={form.control}
 								name='email'
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className='text-slate-100'> Email </FormLabel>
+										<FormLabel> Email * </FormLabel>
 										<FormControl>
-											<Input placeholder='Email' {...field} />
+											<Input placeholder='Enter your email' {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -96,7 +127,7 @@ export default function SignUp() {
 								name='password'
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className='text-slate-100'> Password </FormLabel>
+										<FormLabel> Password * </FormLabel>
 										<FormControl>
 											<Input
 												type='password'
@@ -108,9 +139,80 @@ export default function SignUp() {
 									</FormItem>
 								)}
 							/>
-							<Button type='submit' className='w-full'>
+							<FormField
+								control={form.control}
+								name='role'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel> Role * </FormLabel>
+										<FormControl>
+											<Select
+												value={field.value}
+												onValueChange={field.onChange}
+											>
+												<SelectTrigger>
+													<SelectValue placeholder='select your role' />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value='Super_Admin'>
+														Super_Admin
+													</SelectItem>
+													<SelectItem value='Restaurant_Admin'>
+														Restaurant_Admin
+													</SelectItem>
+												</SelectContent>
+											</Select>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name='restaurant'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel> Restaurant Name * </FormLabel>
+										<FormControl>
+											<Select
+												value={field.value}
+												onValueChange={field.onChange}
+												disabled={selectRole === 'Super_Admin'}
+											>
+												<SelectTrigger>
+													<SelectValue placeholder='select your restaurant name' />
+												</SelectTrigger>
+												<SelectContent>
+													{restauranList?.restaurantNames.map((name, idx) => (
+														<SelectItem value={name} key={idx}>
+															{name}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<Button
+								type='submit'
+								className='w-full bg-emerald-500 hover:bg-emerald-600'
+							>
 								Sign Up
 							</Button>
+							<div className='flex gap-2 justify-center items-center	'>
+								<span className='font-semibold'>
+									{' '}
+									Already have an account ?
+								</span>
+								<Link
+									to='/auth/sign_in'
+									className=' font-semibold drop-shadow-md'
+								>
+									Login
+								</Link>
+							</div>
 						</form>
 					</Form>
 				</div>

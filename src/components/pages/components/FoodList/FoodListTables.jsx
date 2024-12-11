@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import Pagination from './Pagination'
+import { Spinner } from 'flowbite-react'
 
-const itemsPerPages = 5
+const itemsPerPages = 10
 
-export default function FoodListTables({ foodList }) {
-	console.log(foodList)
-
+export default function FoodListTables({ foodList, handleDelete, loadingId }) {
 	const [currentPages, setCurrentPages] = useState(1)
 	const totalpages = Math.ceil((foodList?.Data?.length || 0) / itemsPerPages)
 
@@ -17,8 +16,15 @@ export default function FoodListTables({ foodList }) {
 			currentPages * itemsPerPages
 		) || []
 
+	// useEffect(() => {
+	// 	window.scrollTo({
+	// 		top: 10,
+	// 		behavior: 'smooth',
+	// 	})
+	// }, [currentPages])
+
 	return (
-		<div className='container mx-auto px-2 	 font-manrope'>
+		<div className='container scrollerContainer	 mx-auto px-2 relative  font-manrope'>
 			<h2 className='text-center py-2 font-medium text-lg drop-shadow-lg text-slate-700'>
 				Food Items
 			</h2>
@@ -88,26 +94,30 @@ export default function FoodListTables({ foodList }) {
 												</svg>
 											</button>
 										</NavLink>
-										<button
-											onClick={() => handleDelete(item._id)}
-											className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-flex items-center'
-										>
-											Delete
-											<svg
-												className='w-4 h-4 ml-2'
-												fill='none'
-												stroke='currentColor'
-												viewBox='0 0 24 24'
-												xmlns='http://www.w3.org/2000/svg'
+										{loadingId === item._id ? (
+											<Spinner color='white' size='xl' />
+										) : (
+											<button
+												onClick={() => handleDelete(item._id)}
+												className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-flex items-center'
 											>
-												<path
-													strokeLinecap='round'
-													strokeLinejoin='round'
-													strokeWidth='2'
-													d='M6 18L18 6M6 6l12 12'
-												/>
-											</svg>
-										</button>
+												Delete
+												<svg
+													className='w-4 h-4 ml-2'
+													fill='none'
+													stroke='currentColor'
+													viewBox='0 0 24 24'
+													xmlns='http://www.w3.org/2000/svg'
+												>
+													<path
+														strokeLinecap='round'
+														strokeLinejoin='round'
+														strokeWidth='2'
+														d='M6 18L18 6M6 6l12 12'
+													/>
+												</svg>
+											</button>
+										)}
 									</div>
 								</td>
 							</tr>
@@ -118,8 +128,25 @@ export default function FoodListTables({ foodList }) {
 			<Pagination
 				currentPages={currentPages}
 				totalPages={totalpages}
-				onNext={() => setCurrentPages((prev) => Math.min(prev + 1, totalpages))}
-				onPrev={() => setCurrentPages((prev) => Math.max(prev - 1, 1))}
+				onNext={() => {
+					setCurrentPages((prev) => Math.min(prev + 1, totalpages))
+
+					const mainContent = document.getElementById('main-content')
+					if (mainContent) {
+						mainContent.scrollTo({ top: 0, behavior: 'smooth' })
+					} else {
+						window.scrollTo({ top: 0, behavior: 'smooth' })
+					}
+				}}
+				onPrev={() => {
+					setCurrentPages((prev) => Math.max(prev - 1, 1))
+					const mainContent = document.getElementById('main-content')
+					if (mainContent) {
+						mainContent.scrollTo({ top: 0, behavior: 'smooth' })
+					} else {
+						window.scrollTo({ top: 0, behavior: 'smooth' })
+					}
+				}}
 			/>
 		</div>
 	)
