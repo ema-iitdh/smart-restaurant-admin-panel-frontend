@@ -1,22 +1,9 @@
-import { logout } from '@/api/apiServices';
+import useAuth from '@/components/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { useMutation } from '@tanstack/react-query';
-import React from 'react';
-import { useNavigate } from 'react-router';
 
 export default function SuperAdminHeader() {
-  const navigate = useNavigate();
-
-  const { mutate: handleLogout, isPending: isPendingLogout } = useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      navigate('/auth/sign_in');
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const { handleLogout, logoutPending } = useAuth();
 
   return (
     <div className='bg-customWhite flex items-center justify-between p-3 sticky drop-shadow-md top-0 z-10'>
@@ -27,7 +14,7 @@ export default function SuperAdminHeader() {
       {/* Logout Button */}
       <Button
         variant='destructive'
-        disabled={isPendingLogout}
+        disabled={logoutPending}
         onClick={handleLogout}
       >
         Logout

@@ -23,7 +23,6 @@ export const addRestaurant = async (restaurant) => {
 
 // get all food
 export const getFoodListOfARestaurant = async ({ restaurantId }) => {
-  console.log(`/api/food/foodList/${restaurantId}`);
   const response = await Axios.get(`/api/food/foodList/${restaurantId}`);
   return response.data;
 };
@@ -34,7 +33,17 @@ export const logout = async () => {
 };
 
 export const getRestaurantById = async (restaurantId) => {
-  console.log(`/api/restaurant/getById/${restaurantId}`);
   const response = await Axios.get(`/api/restaurant/getById/${restaurantId}`);
+  return response.data;
+};
+
+export const login = async (values) => {
+  const response = await Axios.post('/api/admin/login', values, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    withCredentials: true,
+  });
+
   return response.data;
 };

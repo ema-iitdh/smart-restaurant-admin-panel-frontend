@@ -28,6 +28,7 @@ import {
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router';
 import AppSideBar from './component/ui/AppSideBar';
 import SuperAdminHeader from './component/SuperAdminHeader';
+import useAuth from '../hooks/useAuth';
 
 // Mock Data
 const userGrowthData = [
@@ -64,12 +65,8 @@ function MainContent() {
     }
   }, [location.pathname]);
 
-  // if the path is /super-admin goto /super-admin/dashboard
-  if (
-    location.pathname === '/super-admin' ||
-    location.pathname === '/super-admin/'
-  ) {
-    return <Navigate to='/super-admin/dashboard' />;
+  if (location.pathname === '/') {
+    return <Navigate to='/dashboard' />;
   }
 
   return (
@@ -85,6 +82,12 @@ function MainContent() {
 }
 
 const SuperAdminDashboard = () => {
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Navigate to='/auth/login' />;
+  }
+
   return (
     <SidebarProvider>
       {/* <div className='flex w-full h-screen '> */}

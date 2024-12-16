@@ -8,6 +8,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { Axios } from '@/lib/axiosApi';
+import { useQuery } from '@tanstack/react-query';
 
 import { LayoutDashboard, Salad, ShieldCheck, Store } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -45,6 +47,12 @@ export default function AppSideBar() {
   //   );
   // };
   const location = useLocation();
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  const { data: permissions } = useQuery({
+    queryKey: ['permissions'],
+    queryFn: () => Axios.get(`/api/admin/getPermissions/${user._id}`),
+  });
 
   return (
     <Sidebar>
@@ -56,23 +64,7 @@ export default function AppSideBar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {[
-                {
-                  title: 'Dashboard',
-                  url: '/super-admin/dashboard',
-                  icon: LayoutDashboard,
-                },
-                {
-                  title: 'Manage Restaurant',
-                  url: '/super-admin/manage-restaurant',
-                  icon: Store,
-                },
-                {
-                  title: 'Manage Food',
-                  url: '/super-admin/manage-food',
-                  icon: Salad,
-                },
-              ].map((item) => {
+              {permissions?.data?.permissions?.map((item) => {
                 const isActive = location.pathname.includes(item.url);
 
                 return (

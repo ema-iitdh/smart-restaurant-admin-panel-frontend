@@ -1,19 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
+import useFoods from '@/hooks/api/query/useFoods';
 import { DataTable } from '../../ui/table-ui/data-table';
-import { getFoodListOfARestaurant } from '@/api/apiServices';
-import { columns } from './columns';
 import TableLoading from '../../ui/table-ui/loading';
+import { columns } from './columns';
 
 export default function FoodTable({ restaurantId }) {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['foodListOfARestaurant', restaurantId],
-    queryFn: () => getFoodListOfARestaurant({ restaurantId }),
-  });
+  const { foods, isLoading, isError } = useFoods({ restaurantId });
 
   if (isLoading) return <TableLoading />;
   if (isError) return <div>Error</div>;
 
-  const foodListWithId = data?.data?.map((food) => ({
+  const foodListWithId = foods?.data?.map((food) => ({
     ...food,
     id: food._id,
   }));
