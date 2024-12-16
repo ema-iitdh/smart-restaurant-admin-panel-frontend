@@ -46,6 +46,14 @@ export default function SelectRestaurant({
     selectedRestaurant = restaurant?.restaurant;
   }
 
+  if (isRestaurantAdmin) {
+    return (
+      <h2 className='text-2xl font-bold text-gray-800 py-2 text-center'>
+        {selectedRestaurant?.name}
+      </h2>
+    );
+  }
+
   return (
     <>
       {!isRestaurantAdmin && isRestaurantListError && (

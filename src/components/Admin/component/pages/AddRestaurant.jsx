@@ -108,12 +108,9 @@ export default function AddRestaurant() {
   return (
     <div className='flex  justify-center items-center p-3'>
       <div className='w-full flex-shrink-0  max-w-lg mx-5 '>
-        <Link replace to={'/super-admin/manage-restaurant'}>
-          <ChevronLeft
-            className='rounded-md bg-slate-200 hover:bg-slate-300 p-2'
-            size={40}
-          />
-        </Link>
+        <Button onClick={() => navigate(-1)}>
+          <ChevronLeft size={40} />
+        </Button>
         <Card>
           <Form {...form}>
             <form

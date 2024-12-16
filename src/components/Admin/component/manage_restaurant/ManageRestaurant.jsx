@@ -1,21 +1,17 @@
-import { Link } from 'react-router-dom';
-import { columns } from './columns';
-import { DataTable } from '../ui/table-ui/data-table';
 import { Button } from '@/components/ui/button';
-import { useQuery } from '@tanstack/react-query';
-import { getAllRestaurant } from '@/api/apiServices';
+import useRestaurants from '@/hooks/api/query/useRestaurants';
+import { Link } from 'react-router-dom';
+import { DataTable } from '../ui/table-ui/data-table';
+import { columns } from './columns';
 
 export default function ManageRestaurant() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['restaurants'],
-    queryFn: getAllRestaurant,
-  });
+  const { restaurants, isLoading, isError } = useRestaurants();
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching data</div>;
 
   // replace all _id with id
-  const restaurantsWithId = data.restaurants.map((restaurant) => ({
+  const restaurantsWithId = restaurants.restaurants.map((restaurant) => ({
     ...restaurant,
     id: restaurant._id,
   }));

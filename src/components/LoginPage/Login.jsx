@@ -1,6 +1,6 @@
 import { Button } from 'flowbite-react';
 import { Link } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import useLogin from '@/hooks/api/mutation/useLogin';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +15,7 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { ClipLoader } from 'react-spinners';
+import useAuth from '../hooks/useAuth';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address', {
@@ -35,11 +36,6 @@ export default function Login() {
     },
   });
 
-  function onsubmit(values) {
-    console.log(values);
-    handleLogin(values);
-  }
-
   return (
     <div className=' min-h-[100svh] flex items-center justify-center bg-gradient-to-br from-customBlue to-customPurple'>
       <div className='flex flex-col gap-3 w-full max-w-md rounded-lg bg-white/90  py-[40px] px-[30px] shadow-md'>
@@ -49,7 +45,7 @@ export default function Login() {
           // onSubmit={handleLogin}
         >
           <form
-            onSubmit={form.handleSubmit(onsubmit)}
+            onSubmit={form.handleSubmit(handleLogin)}
             className='space-y-6 text-customBlack	'
           >
             <h2 className='text-center  font-medium text-lg'>
@@ -99,10 +95,7 @@ export default function Login() {
             </div>
             <div className='flex gap-2 justify-center items-center	'>
               <span className='font-semibold'> Don't have an account?</span>
-              <Link
-                to='/auth/sign_up'
-                className=' font-semibold drop-shadow-md'
-              >
+              <Link to='/auth/signup' className=' font-semibold drop-shadow-md'>
                 Sign Up
               </Link>
             </div>
