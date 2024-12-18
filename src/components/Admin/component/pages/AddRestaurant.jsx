@@ -1,4 +1,4 @@
-import { addRestaurant } from '@/api/apiServices';
+import { restaurantApi } from '@/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -77,7 +77,7 @@ export default function AddRestaurant() {
   });
 
   const { mutate: mutateAddRestaurant, isPending } = useMutation({
-    mutationFn: addRestaurant,
+    mutationFn: restaurantApi.addRestaurant,
     onSuccess: () => {
       toast.success('Restaurant created successfully');
       navigate('/super-admin/manage-restaurant');

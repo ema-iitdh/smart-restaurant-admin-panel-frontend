@@ -1,10 +1,9 @@
-import { deleteRestaurant } from '@/api/apiServices';
 import ActionDropdown from '../ui/action-dropdown/ActionDropdown';
 import BatchSelect from '../ui/table-ui/batch-select';
 import BatchSelectAll from '../ui/table-ui/batch-select-all';
 import { DataTableColumnHeader } from '../ui/table-ui/data-table-column-header';
-import { Check, CrossIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { restaurantApi } from '@/api';
 
 export const columns = [
   {
@@ -15,7 +14,9 @@ export const columns = [
       return (
         <ActionDropdown
           editUrl={`/super-admin/manage-restaurant/edit/${restaurant.id}`}
-          deleteApiFunction={() => deleteRestaurant(restaurant.id)}
+          deleteApiFunction={() =>
+            restaurantApi.deleteRestaurant(restaurant.id)
+          }
           data={restaurant}
         />
       );

@@ -1,15 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import { getRestaurantById } from '@/api/apiServices';
+import { useQuery } from "@tanstack/react-query";
+import { restaurantApi } from "@/api";
 
-export default function useRestaurantById({ restaurantId }) {
-  const {
-    data: restaurant,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['restaurant', restaurantId],
-    queryFn: () => getRestaurantById(restaurantId),
-  });
+export default function useRestaurantById(params = {}, config = {}) {
+	const { data, isLoading, isError } = useQuery({
+		queryKey: ["restaurant", params.restaurantId],
+		queryFn: () => restaurantApi.getRestaurantById(params.restaurantId),
+		...config,
+	});
 
-  return { restaurant, isLoading, isError };
+	return { data, isLoading, isError };
 }

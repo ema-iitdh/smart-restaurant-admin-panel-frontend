@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '../ui/select';
 import { useQuery } from '@tanstack/react-query';
+import { v4 } from 'uuid';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -183,8 +184,8 @@ export default function SignUp() {
                           <SelectValue placeholder='select your restaurant name' />
                         </SelectTrigger>
                         <SelectContent>
-                          {restauranList?.restaurantNames.map((name, idx) => (
-                            <SelectItem value={name} key={idx}>
+                          {restauranList?.restaurantNames.map((name) => (
+                            <SelectItem value={name} key={name._id || v4()}>
                               {name}
                             </SelectItem>
                           ))}

@@ -1,7 +1,3 @@
-import {
-  useCategorylist,
-  useSubCategoryList,
-} from '@/components/hooks/useCategorylist';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -23,14 +19,13 @@ import {
 } from '@/components/ui/select';
 import { Axios } from '@/lib/axiosApi';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SelectLabel } from '@radix-ui/react-select';
 import { Textarea } from 'flowbite-react';
-import { CalendarCog } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation, useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import { z } from 'zod';
 import SelectRestaurant from '../SelectRestaurant';
+import useAuth from '@/components/hooks/useAuth';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -52,11 +47,11 @@ const formSchema = z.object({
 export default function AddFood() {
   const [selectCategory, setSelectCategory] = useState('');
   const location = useLocation();
-  const user = JSON.parse(localStorage.getItem('user'));
+  const { user } = useAuth();
   const [restaurantId, setRestaurantId] = useState(null);
 
   useEffect(() => {
-    if (user.role === 'Restaurant_Admin') {
+    if (user?.role === 'Restaurant_Admin') {
       setRestaurantId(user.restaurant);
     }
   }, [user]);
@@ -68,8 +63,8 @@ export default function AddFood() {
       description: '',
       price: 0,
       category: '',
-      subategory: '',
-      image: null || undefined,
+      subcategory: '',
+      image: null,
     },
   });
 
@@ -221,7 +216,7 @@ export default function AddFood() {
                               {categorylist?.category?.map(
                                 (categoryName, idx) => (
                                   <SelectItem
-                                    key={idx}
+                                    key={categoryName._id}
                                     value={categoryName.category}
                                   >
                                     {categoryName.category}
@@ -253,8 +248,11 @@ export default function AddFood() {
                           <SelectContent>
                             <SelectGroup>
                               {subCategories?.subcategories.map(
-                                (subcategory, idx) => (
-                                  <SelectItem value={subcategory} key={idx}>
+                                (subcategory) => (
+                                  <SelectItem
+                                    value={subcategory}
+                                    key={subcategory}
+                                  >
                                     {subcategory}
                                   </SelectItem>
                                 )

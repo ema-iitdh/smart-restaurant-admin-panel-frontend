@@ -1,4 +1,4 @@
-import { deleteRestaurant } from '@/api/apiServices';
+import { foodApi } from '@/api';
 import ActionDropdown from '../../ui/action-dropdown/ActionDropdown';
 import BatchSelect from '../../ui/table-ui/batch-select';
 import BatchSelectAll from '../../ui/table-ui/batch-select-all';
@@ -15,7 +15,7 @@ export const columns = [
       return (
         <ActionDropdown
           editUrl={`/super-admin/manage-food/edit/${food.id}`}
-          deleteApiFunction={() => deleteRestaurant(food.id)}
+          deleteApiFunction={() => foodApi.deleteFood(food.id)}
           data={food}
         />
       );

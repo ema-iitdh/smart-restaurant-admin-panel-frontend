@@ -1,20 +1,22 @@
-import { useMutation } from '@tanstack/react-query';
-import { addRestaurant } from '@/api/apiServices';
+import { useMutation } from "@tanstack/react-query";
+import { restaurantApi } from "@/api";
+import { toast } from "react-toastify";
 
-export default function useAddRestaurant() {
-  const {
-    mutate: addRestaurantMutation,
-    isLoading,
-    isError,
-  } = useMutation({
-    mutationFn: (restaurant) => addRestaurant(restaurant),
-    onSuccess: () => {
-      toast.success('Restaurant added successfully');
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+export default function useAddRestaurant(params = {}, config = {}) {
+	const {
+		mutate: addRestaurantMutation,
+		isLoading,
+		isError,
+	} = useMutation({
+		mutationFn: (restaurant) => restaurantApi.addRestaurant(restaurant),
+		onSuccess: () => {
+			toast.success("Restaurant added successfully");
+		},
+		onError: (error) => {
+			toast.error(error.message);
+		},
+		...config,
+	});
 
-  return { addRestaurantMutation, isLoading, isError };
+	return { addRestaurantMutation, isLoading, isError };
 }

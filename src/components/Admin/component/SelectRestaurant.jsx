@@ -1,4 +1,4 @@
-import { getAllRestaurant, getRestaurantById } from '@/api/apiServices';
+import { restaurantApi } from '@/api';
 import {
   Select,
   SelectContent,
@@ -6,6 +6,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import useRestaurantById from '@/hooks/api/query/useRestaurantById';
+import useRestaurants from '@/hooks/api/query/useRestaurants';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -14,26 +16,31 @@ export default function SelectRestaurant({
   setRestaurantId,
   isRestaurantAdmin,
 }) {
-  // get all restaurant list
   const {
-    data: restaurantList,
+    restaurants: restaurantList,
     isLoading: isRestaurantListLoading,
     isError: isRestaurantListError,
-  } = useQuery({
-    queryKey: ['restaurants'],
-    queryFn: () => getAllRestaurant(),
-    enabled: !isRestaurantAdmin,
-  });
+  } = useRestaurants({}, { enabled: !isRestaurantAdmin });
 
-  const { data: restaurant } = useQuery({
-    queryKey: ['restaurant', restaurantId],
-    queryFn: () => getRestaurantById(restaurantId),
-    enabled: isRestaurantAdmin && restaurantId !== 'null',
-  });
-
-  console.log(restaurantId);
+  const { data: restaurant, isLoading: isRestaurantLoading } =
+    useRestaurantById(
+      { restaurantId },
+      {
+        onSuccess: (data) => {
+          console.log(data);
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+        enabled: isRestaurantAdmin && restaurantId !== 'null',
+      }
+    );
 
   const queryClient = useQueryClient();
+
+  if (isRestaurantLoading) {
+    return <div>Loading...</div>;
+  }
 
   let selectedRestaurant =
     restaurantId === 'null'
@@ -43,6 +50,7 @@ export default function SelectRestaurant({
         );
 
   if (isRestaurantAdmin && restaurantId !== 'null') {
+    console.log(selectedRestaurant, restaurant);
     selectedRestaurant = restaurant?.restaurant;
   }
 
