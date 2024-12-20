@@ -13,7 +13,7 @@ export default function Layout() {
 					<Profile />
 					<div
 						id='main-content'
-						className=' flex-1  p-4 overflow-auto h-[100lvh] '
+						className=' flex-1  p-3 overflow-auto h-[100lvh] '
 					>
 						<Outlet />
 					</div>

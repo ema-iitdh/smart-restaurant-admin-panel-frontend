@@ -1,15 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import { getRestaurantById } from '@/api/apiServices';
+import { useQuery } from '@tanstack/react-query'
+import { getRestaurantById } from '@/api/apiServices'
 
-export default function useRestaurantById({ restaurantId }) {
-  const {
-    data: restaurant,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['restaurant', restaurantId],
-    queryFn: () => getRestaurantById(restaurantId),
-  });
+export default function useRestaurantById({ restaurantId, isRestaurantAdmin }) {
+	const isEnabled = isRestaurantAdmin && restaurantId !== 'null'
 
-  return { restaurant, isLoading, isError };
+	return useQuery({
+		queryKey: ['restaurant', restaurantId],
+		queryFn: () => getRestaurantById(restaurantId),
+		enabled: isEnabled,
+	})
 }
