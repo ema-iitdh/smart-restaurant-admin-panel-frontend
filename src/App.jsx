@@ -16,6 +16,7 @@ import ManageAdmin from './pages/admin/pages/manage-admin/ManageAdmin'
 import ManageRestaurant from './pages/admin/pages/manage_restaurant/ManageRestaurant'
 import AddFood from './pages/admin/pages/manage-food/AddFood'
 import ManagePermission from './pages/admin/pages/manage-permission/ManagePermission'
+import AddPermissionRoute from './pages/admin/pages/manage-permission/AddPermissionRoute'
 
 function App() {
 	return (
@@ -46,7 +47,7 @@ function App() {
 						</Route>
 						<Route path='manage-permission'>
 							<Route index element={<ManagePermission />} />
-							{/* <Route path='add-permission' element={<SignUp />} /> */}
+							<Route path='add-permission' element={<AddPermissionRoute />} />
 						</Route>
 					</Route>
 

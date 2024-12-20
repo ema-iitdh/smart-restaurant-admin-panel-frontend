@@ -79,8 +79,7 @@ export default function AppSideBar() {
 										Restaurant: Store,
 										Permission: Users,
 										Admin: UserCog,
-										default: ShieldCheck,
-									}[item.icon] || IconComponent.default
+									}[item.icon] || ShieldCheck
 
 								return (
 									<SidebarMenuItem

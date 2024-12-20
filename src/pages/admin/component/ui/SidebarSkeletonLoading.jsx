@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function SidebarSkeletonLoading() {
 	return (
-		<div className='flex flex-col gap-4 p-4 w-64 h-screen bg-white shadow-lg animate-pulse'>
+		<div className='flex flex-col gap-4 p-4 w-64 h-screen bg-slate-800  shadow-lg animate-pulse'>
 			<div className='h-12 bg-gray-200 rounded-md'></div>
 			<div className='space-y-3'>
 				{[...Array(6)].map((_, index) => (
