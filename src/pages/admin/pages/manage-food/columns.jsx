@@ -5,6 +5,7 @@ import BatchSelectAll from '../../component/ui/table-ui/batch-select-all'
 import { DataTableColumnHeader } from '../../component/ui/table-ui/data-table-column-header'
 import { Check, CrossIcon } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { Cell } from 'recharts'
 
 export const columns = [
 	{
@@ -41,7 +42,7 @@ export const columns = [
 			const image = row.getValue('image')
 			return (
 				<img
-					className='object-cover w-full overflow-hidden h-[5rem] rounded'
+					className='object-cover w-[5rem] overflow-hidden h-[5rem] rounded'
 					src={image}
 					alt='Food'
 				/>
@@ -58,52 +59,102 @@ export const columns = [
 		enableSorting: true,
 	},
 	{
-		accessorKey: 'contact.email',
+		accessorKey: 'price',
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Email' />
-		),
-		enableSorting: true,
-		enableHiding: true,
-	},
-	{
-		accessorKey: 'contact.phone',
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Phone' />
-		),
-	},
-	{
-		accessorKey: 'contact.address',
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Address' />
-		),
-		enableSorting: true,
-		enableHiding: true,
-	},
-	{
-		accessorKey: 'settings.taxPercentage',
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Tax Percentage' />
-		),
-		enableSorting: true,
-		enableHiding: true,
-	},
-	{
-		accessorKey: 'settings.isActive',
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title='Is Active' />
+			<DataTableColumnHeader column={column} title='Price' />
 		),
 		cell: ({ row }) => {
-			return row.original?.settings?.isActive ? (
-				<Badge className='bg-emerald-500 text-white' variant='outline'>
-					Active
-				</Badge>
-			) : (
-				<Badge className='bg-red-500 text-white' variant='outline'>
-					Inactive
-				</Badge>
-			)
+			const price = row.getValue('price')
+			return <span className='font-semibold'>&#8377; {price}</span>
 		},
 		enableSorting: true,
 		enableHiding: true,
 	},
+	{
+		accessorKey: 'isAvailable',
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title='Is Available' />
+		),
+		cell: ({ row }) => {
+			const isAvailable = row.original?.isAvailable
+			return (
+				<Badge
+					variant='outline'
+					className={
+						isAvailable ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'
+					}
+				>
+					{isAvailable ? 'Available' : 'Not Available'}
+				</Badge>
+			)
+		},
+	},
+	{
+		accessorKey: 'todaysSpecial',
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title='Today Special' />
+		),
+		cell: ({ row }) => {
+			const todaysSpecial = row.original?.todaysSpecial
+			return (
+				<Badge
+					variant='outline'
+					className={`
+							
+						${todaysSpecial ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'}`}
+				>
+					{todaysSpecial ? 'Yes' : 'No'}
+				</Badge>
+			)
+		},
+	},
+	// {
+	// 	accessorKey: 'contact.email',
+	// 	header: ({ column }) => (
+	// 		<DataTableColumnHeader column={column} title='Email' />
+	// 	),
+	// 	enableSorting: true,
+	// 	enableHiding: true,
+	// },
+	// {
+	// 	accessorKey: 'contact.phone',
+	// 	header: ({ column }) => (
+	// 		<DataTableColumnHeader column={column} title='Phone' />
+	// 	),
+	// },
+	// {
+	// 	accessorKey: 'contact.address',
+	// 	header: ({ column }) => (
+	// 		<DataTableColumnHeader column={column} title='Address' />
+	// 	),
+	// 	enableSorting: true,
+	// 	enableHiding: true,
+	// },
+	// {
+	// 	accessorKey: 'settings.taxPercentage',
+	// 	header: ({ column }) => (
+	// 		<DataTableColumnHeader column={column} title='Tax Percentage' />
+	// 	),
+	// 	enableSorting: true,
+	// 	enableHiding: true,
+	// },
+	// {
+	// 	accessorKey: 'settings.isActive',
+	// 	header: ({ column }) => (
+	// 		<DataTableColumnHeader column={column} title='Is Active' />
+	// 	),
+	// 	cell: ({ row }) => {
+	// 		return row.original?.settings?.isActive ? (
+	// 			<Badge className='bg-emerald-500 text-white' variant='outline'>
+	// 				Active
+	// 			</Badge>
+	// 		) : (
+	// 			<Badge className='bg-red-500 text-white' variant='outline'>
+	// 				Inactive
+	// 			</Badge>
+	// 		)
+	// 	},
+	// 	enableSorting: true,
+	// 	enableHiding: true,
+	// },
 ]

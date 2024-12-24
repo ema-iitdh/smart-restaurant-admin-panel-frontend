@@ -57,6 +57,7 @@ export default function SelectRestaurant({
 				<div className='text-red-500'>Error loading restaurant list</div>
 			)}
 			<Select
+				value={restaurantId || 'null'} // Add default value here
 				onValueChange={(value) => {
 					setRestaurantId(value)
 					queryClient.invalidateQueries({

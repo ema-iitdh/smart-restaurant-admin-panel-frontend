@@ -14,20 +14,22 @@ import { useQuery } from '@tanstack/react-query'
 
 import {
 	Crown,
+	Key,
 	LayoutDashboard,
 	Salad,
 	ShieldCheck,
+	ShoppingCart,
 	Store,
 	UserCog,
 	Users,
 } from 'lucide-react'
 import { NavLink, useLocation } from 'react-router-dom'
 import SidebarSkeletonLoading from './SidebarSkeletonLoading'
+import { useState } from 'react'
 
 export default function AppSideBar() {
 	const location = useLocation()
 	const { user } = useAuth()
-	console.log('user: ', user)
 
 	const { data: permissions, isLoading } = useQuery({
 		queryKey: ['permissions'],
@@ -69,7 +71,6 @@ export default function AppSideBar() {
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{permissions?.data?.permissions?.map((item) => {
-								console.log('permission', item)
 								const isActive = location.pathname.includes(item.url)
 
 								const IconComponent =
@@ -79,6 +80,9 @@ export default function AppSideBar() {
 										Restaurant: Store,
 										Permission: Users,
 										Admin: UserCog,
+										restaurantInfo: Store,
+										Orders: ShoppingCart,
+										Authentication: Key,
 									}[item.icon] || ShieldCheck
 
 								return (

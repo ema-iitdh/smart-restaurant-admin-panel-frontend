@@ -18,6 +18,7 @@ export default function FoodTable({ restaurantId }) {
 		...food,
 		id: food._id,
 	}))
+	console.log('foods	', foodListWithId)
 
 	return <DataTable columns={columns} data={foodListWithId} />
 }

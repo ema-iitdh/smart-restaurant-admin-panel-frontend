@@ -17,6 +17,13 @@ import ManageRestaurant from './pages/admin/pages/manage_restaurant/ManageRestau
 import AddFood from './pages/admin/pages/manage-food/AddFood'
 import ManagePermission from './pages/admin/pages/manage-permission/ManagePermission'
 import AddPermissionRoute from './pages/admin/pages/manage-permission/AddPermissionRoute'
+import AddAdmin from './pages/admin/pages/manage-admin/AddAdmin'
+import ManageCategory from './pages/admin/pages/manage-category/ManageCategory'
+import UpdatePermission from './pages/admin/pages/manage-permission/_component/UpdatePermission'
+import Orders from './pages/admin/pages/orders/Orders'
+import RestaurantInfo from './pages/admin/pages/restaurant-info/RestaurantInfo'
+import OneTimePassword from './pages/admin/pages/one-time-password/OneTimePassword'
+import AddCategory from './pages/admin/pages/manage-category/_component/AddCategory'
 
 function App() {
 	return (
@@ -43,11 +50,31 @@ function App() {
 						</Route>
 						<Route path='manage-admin'>
 							<Route index element={<ManageAdmin />} />
-							<Route path='add-admin' element={<SignUp />} />
+							<Route path='add-admin' element={<AddAdmin />} />
 						</Route>
 						<Route path='manage-permission'>
 							<Route index element={<ManagePermission />} />
 							<Route path='add-permission' element={<AddPermissionRoute />} />
+							<Route
+								path='update-permission/:userId/:permissionId'
+								element={<UpdatePermission />}
+							/>
+						</Route>
+						<Route path='manage-category'>
+							<Route index element={<ManageCategory />} />
+							<Route path='add-category' element={<AddCategory />} />
+						</Route>
+						<Route path='restaurant-info'>
+							<Route index element={<RestaurantInfo />} />
+							{/* <Route path='add-category' element={<AddCategory />} /> */}
+						</Route>
+						<Route path='orders'>
+							<Route index element={<Orders />} />
+							{/* <Route path='add-category' element={<AddCategory />} /> */}
+						</Route>
+						<Route path='otp'>
+							<Route index element={<OneTimePassword />} />
+							{/* <Route path='add-category' element={<AddCategory />} /> */}
 						</Route>
 					</Route>
 

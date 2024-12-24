@@ -23,7 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import axios from 'axios'
+import { Axios } from '@/lib/axiosApi'
 import { handleAddPermission } from '@/api/apiServices'
 
 const formSchema = z.object({
@@ -53,7 +53,7 @@ export default function AddPermissionRoute() {
 	})
 
 	const { mutate, isPending } = useMutation({
-		mutationFn: ({ values = {}, userId }) =>
+		mutationFn: ({ values, userId }) =>
 			handleAddPermission({ permissions: [values] }, userId),
 		onSuccess: () => {
 			toast.success('Permission added successfully')
@@ -84,14 +84,17 @@ export default function AddPermissionRoute() {
 					<SelectContent>
 						{getAllAdmin?.adminData?.map((admin) => (
 							<SelectItem key={admin._id} value={admin._id}>
-								{admin.name || admin.email}
+								{`${admin.name} - ${admin.email}`}
 							</SelectItem>
 						))}
 					</SelectContent>
 				</Select>
 			</div>
 			<Form {...form} className='space-y-6'>
-				<form onSubmit={form.handleSubmit(handleCreatedPermission)}>
+				<form
+					onSubmit={form.handleSubmit(handleCreatedPermission)}
+					className='space-y-4'
+				>
 					<FormField
 						control={form.control}
 						name='title'

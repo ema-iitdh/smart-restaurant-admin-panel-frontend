@@ -22,7 +22,7 @@ export const addRestaurant = async (restaurant) => {
 }
 
 // get all food
-export const getFoodListOfARestaurant = async ({ restaurantId }) => {
+export const getFoodListOfAllRestaurant = async ({ restaurantId }) => {
 	const response = await Axios.get(`/api/food/foodList/${restaurantId}`)
 	return response.data
 }
@@ -49,13 +49,56 @@ export const login = async (values) => {
 }
 export const getAllRestaurantAdmin = async () => {
 	const response = await Axios.get('/api/admin/allAdmin')
-	console.log('response', response.data)
 	return response.data
 }
+
 export const handleAddPermission = async (values, userId) => {
 	const response = await Axios.post(
 		`/api/admin/addPermissions/${userId}`,
 		values
 	)
+	return response.data
+}
+export const getAllPermission = async (userId) => {
+	const response = await Axios.get(`/api/admin/getPermissions/${userId}`)
+	return response.data
+}
+export const updatePermission = async (values, userId) => {
+	if (!userId) {
+		throw new Error('User ID is required')
+	}
+	const response = await Axios.put(
+		`/api/admin/updatePermissions/${userId}`,
+		values
+	)
+	return response.data
+}
+
+export const deletePermission = async ({ userId, permissionIds }) => {
+	if (!userId || !Array.isArray(permissionIds)) {
+		throw new Error(
+			'Invalid data: userId or permissionIds are missing or not an array.'
+		)
+	}
+
+	try {
+		const response = await Axios.delete(
+			`/api/admin/deletePermissions/${userId}`,
+			{
+				data: { permissionIds }, // Send permissionIds in the request body
+			}
+		)
+
+		return response.data
+	} catch (error) {
+		console.error('Error deleting permissions:', error)
+		throw new Error(
+			error.response ? error.response.data.message : 'Unknown error'
+		)
+	}
+}
+
+export const getAllCategories = async (restaurantId) => {
+	const response = await Axios.get(`api/category/list/${restaurantId}`)
 	return response.data
 }

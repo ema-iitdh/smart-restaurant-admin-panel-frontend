@@ -13,7 +13,6 @@ export default function useLogin() {
 		error: loginError,
 	} = useMutation({
 		mutationFn: (values) => {
-			console.log('values', values)
 			return login(values)
 		},
 		onSuccess: (data) => {

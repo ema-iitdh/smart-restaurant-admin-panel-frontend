@@ -1,15 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
-import { getFoodListOfARestaurant } from '@/api/apiServices';
+import { getFoodListOfAllRestaurant } from '@/api/apiServices'
+import { useQuery } from '@tanstack/react-query'
 
 export default function useFoods({ restaurantId }) {
-  const {
-    data: foods,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['foods', restaurantId],
-    queryFn: () => getFoodListOfARestaurant({ restaurantId }),
-  });
+	const {
+		data: foods,
+		isLoading,
+		isError,
+	} = useQuery({
+		queryKey: ['foods', restaurantId],
+		queryFn: () => getFoodListOfAllRestaurant({ restaurantId }),
+	})
 
-  return { foods, isLoading, isError };
+	return { foods, isLoading, isError }
 }

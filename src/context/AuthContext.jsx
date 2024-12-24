@@ -14,7 +14,14 @@ export const AuthProvider = ({ children }) => {
 
 	const userString = localStorage.getItem('user')
 
-	const userData = useMemo(() => JSON.parse(userString), [userString])
+	const userData = useMemo(() => {
+		try {
+			return JSON.parse(userString)
+		} catch (e) {
+			console.error('Error parsing user data:', e)
+			return null
+		}
+	}, [userString])
 
 	const [user, setUser] = useState(userData)
 
