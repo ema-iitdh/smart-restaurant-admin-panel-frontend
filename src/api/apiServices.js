@@ -102,3 +102,31 @@ export const getAllCategories = async (restaurantId) => {
 	const response = await Axios.get(`api/category/list/${restaurantId}`)
 	return response.data
 }
+
+export const addCategory = async ({ category, restaurantId }) => {
+	const response = await Axios.post(
+		`/api/category/create/category/${restaurantId}`,
+		category
+	)
+	return response.data
+}
+
+export const addSubcategory = async ({
+	subcategories,
+	categoryId,
+	restaurantId,
+}) => {
+	const response = await Axios.post(
+		`/api/category/create/subcategory/${restaurantId}`,
+		{ categoryId, subcategories }
+	)
+	return response.data
+}
+//updateCategory
+export const updateCategory = async ({ values, restaurantId, categoryId }) => {
+	const response = await Axios.put(
+		`/api/category/update/category/${restaurantId}/${categoryId}`,
+		values
+	)
+	return response.data
+}

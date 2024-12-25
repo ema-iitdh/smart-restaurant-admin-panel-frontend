@@ -11,7 +11,7 @@ export default function SuperAdminHeader() {
 		restaurantId,
 		isRestaurantAdmin,
 	})
-	// if (isLoading) return <div>Loading...</div>
+	// if (isLoading) return <div>Loading...</div>  
 
 	return (
 		<div className='bg-customWhite flex items-center justify-between p-2 sticky drop-shadow-md top-0 z-10'>

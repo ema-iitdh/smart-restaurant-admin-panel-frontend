@@ -11,7 +11,7 @@ export default function ManageAdmin() {
 					<p className='text-gray-600 mb-4'>
 						Manage user accounts and permissions
 					</p>
-					<Link to='add-admin' className='text-blue-500 hover:text-blue-700'>
+					<Link	 to='add-admin' className='text-blue-500 hover:text-blue-700'>
 						Manage Users →
 					</Link>
 				</div>

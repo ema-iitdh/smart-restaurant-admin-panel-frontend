@@ -10,11 +10,11 @@ import { Cell } from 'recharts'
 export const columns = [
 	{
 		id: 'actions',
-		Cell: ({ row }) => {
+		cell: ({ row }) => {
 			const category = row.original
 			return (
 				<ActionDropdown
-					editUrl={`/super-admin/manage-category/edit/${category.id}`}
+					editUrl={`update-category/${category.restaurant}/${category._id}`}
 					deleteApiFunction={() => deleteCategory(category.id)}
 					data={category}
 				/>
@@ -39,7 +39,6 @@ export const columns = [
 		),
 		cell: ({ row }) => {
 			// Changed from Cell to cell
-			console.log('sub', row)
 			const subcategory = row.getValue('subcategory')
 
 			return (

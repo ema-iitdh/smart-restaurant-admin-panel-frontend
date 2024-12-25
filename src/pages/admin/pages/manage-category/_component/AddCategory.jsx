@@ -16,10 +16,12 @@ import FormCustomLabel from '../../../component/ui/form-components/FormCustomLab
 import AddSubCategory from './AddSubCategory'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router'
+import { useCreateCategory } from '@/hooks/api/mutation/useCreateCategory'
+import useAuth from '@/components/hooks/useAuth'
+import { toast } from 'react-toastify'
 
 const formSchema = z.object({
 	category: z.string().nonempty(),
-	subcategories: z.array(z.string().nonempty()),
 })
 export default function AddCategory() {
 	const navigate = useNavigate()
@@ -29,9 +31,20 @@ export default function AddCategory() {
 			category: '',
 		},
 	})
+	const { user } = useAuth()
+	const restaurantId = user?.restaurant
+	const { mutate, isPending, isError, error } = useCreateCategory({
+		onSuccess: () => {
+			toast.success('Category added successfully')
+			form.reset()
+		},
+		onError: (error) => {
+			toast.error(error.message)
+		},
+	})
 
-	const onSubmit = (data) => {
-		console.log(data)
+	const handleCreatedCategory = (values) => {
+		mutate({ category: values, restaurantId })
 	}
 
 	return (
@@ -46,7 +59,7 @@ export default function AddCategory() {
 			</Button>
 			<Form {...form} className='p-4 md:p-6 bg-white rounded-lg shadow-md'>
 				<form
-					onSubmit={form.handleSubmit(onSubmit)}
+					onSubmit={form.handleSubmit(handleCreatedCategory)}
 					className='space-y-4 md:space-y-6 text-customBlack'
 				>
 					<h2 className='text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-center'>
@@ -71,10 +84,11 @@ export default function AddCategory() {
 					/>
 
 					<Button
+						disabled={isPending}
 						type='submit'
 						className='mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md'
 					>
-						Save Category
+						{isPending ? 'loading...' : 'Save Category'}
 					</Button>
 				</form>
 			</Form>

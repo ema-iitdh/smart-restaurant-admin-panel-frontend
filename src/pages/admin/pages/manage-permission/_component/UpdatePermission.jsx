@@ -91,7 +91,7 @@ export default function UpdatePermission() {
 									<Input placeholder='Enter permission name' {...field} />
 								</FormControl>
 								<FormMessage />
-							</FormItem>
+							</FormItem>	
 						)}
 					/>
 					<FormField

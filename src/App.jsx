@@ -24,6 +24,9 @@ import Orders from './pages/admin/pages/orders/Orders'
 import RestaurantInfo from './pages/admin/pages/restaurant-info/RestaurantInfo'
 import OneTimePassword from './pages/admin/pages/one-time-password/OneTimePassword'
 import AddCategory from './pages/admin/pages/manage-category/_component/AddCategory'
+import UpdateCategory from './pages/admin/pages/manage-category/_component/UpdateCategory'
+import EditFood from './pages/admin/pages/manage-food/EditFood'
+import CategoryUpdateForm from './pages/admin/pages/manage-category/_component/UpdateCategory'
 
 function App() {
 	return (
@@ -47,6 +50,7 @@ function App() {
 						<Route path='manage-food'>
 							<Route index element={<ManageFood />} />
 							<Route path='add-food' element={<AddFood />} />
+							<Route path='update-food/:foodId' element={<EditFood />} />
 						</Route>
 						<Route path='manage-admin'>
 							<Route index element={<ManageAdmin />} />
@@ -63,6 +67,10 @@ function App() {
 						<Route path='manage-category'>
 							<Route index element={<ManageCategory />} />
 							<Route path='add-category' element={<AddCategory />} />
+							<Route
+								path='update-category/:restaurantId/:categoryId'
+								element={<CategoryUpdateForm />}
+							/>
 						</Route>
 						<Route path='restaurant-info'>
 							<Route index element={<RestaurantInfo />} />

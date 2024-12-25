@@ -15,8 +15,8 @@ export const columns = [
 
 			return (
 				<ActionDropdown
-					editUrl={`/super-admin/manage-food/edit/${food.id}`}
-					deleteApiFunction={() => deleteRestaurant(food.id)}
+					editUrl={`update-food/${food._id}`}
+					deleteApiFunction={() => deleteRestaurant(food._id)}
 					data={food}
 				/>
 			)
