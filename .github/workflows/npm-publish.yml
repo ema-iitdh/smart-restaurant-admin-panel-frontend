@@ -1,36 +1,19 @@
 # This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
 # For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
 
-name: Smart Restaurant Admin
+name: Deploy Smart Restaurant Admin Panel Frontend
 
 on:
   push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
+    branches: [ "main" ]
 
 jobs:
-  build:
-    # The job runs on a self-hosted runner
+  deploy:
     runs-on: self-hosted
-
     steps:
-      # Step 1: Check out the code from the repository
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # Step 2: Setup Node.js environment
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18.x # Optionally ensure the latest 18.x version
-
-      # Step 3: Install dependencies
-      - name: Install dependencies
-        run: npm install
-
-      # Step 4: Build the project (only if there is a build script)
-
-      - name: Build the project
-        run: |
-          NODE_OPTIONS="--max-old-space-size=8192" npm run build
+          node-version: 20
+      - run: npm i
+      - run: npm run build
